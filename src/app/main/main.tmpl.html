@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <h1>
+      <div>
+        {{theMainCtrl.pageInfo.name}}
+      </div>
+    </h1>
+  </div>
+  <div id="alert-anchor"></div>
+  <div class="row">
+    <div class="col-md-4">
+      <button class="btn btn-primary btn-lg" ng-click="theMainCtrl.newPost()">New Post</button>
+
+      <h3 class="text-danger">Unpublished Posts</h3>
+      <table class="table table-condensed table-responsive table-hover">
+        <tr>
+          <th>
+            Scheduled Post Time
+          </th>
+          <th>
+            Message
+          </th>
+          <th>
+            Unique Impressions
+          </th>
+        </tr>
+        <tr ng-repeat="post in theMainCtrl.unpublishedPostList" ng-click="theMainCtrl.setCurPost(post.id)">
+          <td>
+            {{post.scheduled_publish_time * 1000| date:'MM/dd/yyyy @ h:mma'}}
+
+           <!-- {{post.scheduledtime | date:'MM/dd/yyyy @ h:mma'}} -->
+          </td>
+          <td>
+            {{post.message}}
+          </td>
+          <td>
+            {{post.insight}}
+          </td>
+        </tr>
+      </table>
+
+      <h3 class="text-success">Published Posts</h3>
+      <table class="table table-condensed table-responsive">
+        <tr>
+          <th>
+            Created Time
+          </th>
+          <th>
+            Message
+          </th>
+          <th>
+            Unique Impressions
+          </th>
+        </tr>
+        <tr ng-repeat="post in theMainCtrl.publishedPostList" ng-click="theMainCtrl.setCurPost(post.id)">
+          <td>
+            {{post.created_time | date:'MM/dd/yyyy @ h:mma'}}
+          </td>
+          <td>
+            {{post.message}}{{post.story}}
+          </td>
+          <td>
+            {{post.insight}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-8">
+      <div ui-view></div>
+
+
+      <div ng-if="!theMainCtrl.curPost">
+        <h1>Go ahead and choose a post from the list or create a new post</h1>
+      </div>
+      <div ng-if="theMainCtrl.curPost && !theMainCtrl.posting">
+        <div ng-if="theMainCtrl.curPost.isNew">
+          <ng-include src="'app/main/main.tmpl.newpost.html'"></ng-include>
+        </div>
+        <div ng-if="!theMainCtrl.curPost.isNew">
+          <div>
+            <h2>Created on:</h2>
+            {{theMainCtrl.curPost.created_time | date:'MM/dd/yyyy @ h:mma'}}
+          </div>
+          <div>
+            <h2>Content</h2>
+            {{theMainCtrl.curPost.message}}{{theMainCtrl.curPost.story}}
+          </div>
+        </div>
+      </div>
+      <div ng-if="theMainCtrl.posting">
+        <div style="padding-left:20rem;padding-right:20rem">
+          <div class="spinner-loader">
+            Loading…
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
